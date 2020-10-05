@@ -1,0 +1,20 @@
+---
+- name: Transfer the update_docker_token.sh script and execute on the node
+  remote_user: root
+  hosts: nodes
+  tasks:
+     - name: Transfer the executable shell script
+       copy: src=update_docker_token.sh dest=/root mode=0774
+
+     - name: Execute the script
+       command: sh /root/update_docker_token.sh
+
+     - name: Remove the script
+       file:
+         path: /root/update_docker_token.sh
+         state: absent
+    
+     - name: Restart the docker service
+       service:
+         name: docker
+         state: restarted
